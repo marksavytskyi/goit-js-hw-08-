@@ -7,17 +7,7 @@ const refs = {
   form: document.querySelector('.form')
 }
 
-
-refs.firstDelay.addEventListener('input', onFirstDelay);
-refs.step.addEventListener('input', onStep);
-refs.amount.addEventListener('input', onAmount);
 refs.form.addEventListener('submit', onSubmit);
-
-let firstDelay = null;
-let step = null;
-let amount = null;
-let position = null;
-
 
 function createPromise(position, delay) {
 
@@ -40,6 +30,12 @@ function createPromise(position, delay) {
 
 function onSubmit(e) {
   e.preventDefault();
+
+  let firstDelay = Number(e.currentTarget.delay.value);
+  let step = Number(e.currentTarget.step.value);
+  let amount = Number(e.currentTarget.amount.value);
+  
+  let position = null;
   
   for (let i = 0; i < amount; i++) {
     createPromise(position += 1, firstDelay)
@@ -49,16 +45,7 @@ function onSubmit(e) {
       .catch(({ position, delay }) => {
         Notiflix.Notify.failure(`Rejected promise ${position} in ${delay}ms`);
       });
+    
     firstDelay += step;
   }
-}
-
-function onFirstDelay(e) {
-  firstDelay = Number(e.currentTarget.value);
-}
-function onStep(e) {
-  step = Number(e.currentTarget.value);
-}
-function onAmount(e) {
-  amount = Number(e.currentTarget.value);
 }
